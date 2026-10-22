@@ -485,8 +485,30 @@ def run_mcts(state, to_play, net, num_simulations, c_puct):
     # 3. Return the root containing visit statistics and children
     return root
 
-# Step 37 - visit_count_policy (not yet solved)
-# TODO: implement
+# Step 37 - visit_count_policy
+def visit_count_policy(root, temperature=1.0):
+    policy = np.zeros(7, dtype=np.float64)
+
+    # Collect child visit counts
+    for action, child in root['children'].items():
+        policy[action] = child['visit_count']
+
+    # Empty children or zero total visits: uniform distribution
+    if policy.sum() == 0:
+        return np.ones(7, dtype=np.float64) / 7
+
+    # Temperature = 0: choose the most-visited column
+    if temperature == 0:
+        best_action = np.argmax(policy)
+        result = np.zeros(7, dtype=np.float64)
+        result[best_action] = 1.0
+        return result
+
+    # Apply temperature scaling
+    policy = policy ** (1.0 / temperature)
+    policy /= policy.sum()
+
+    return policy
 
 # Step 38 - mcts_choose_action (not yet solved)
 # TODO: implement
