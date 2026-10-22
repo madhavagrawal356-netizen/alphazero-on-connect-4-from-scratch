@@ -510,8 +510,20 @@ def visit_count_policy(root, temperature=1.0):
 
     return policy
 
-# Step 38 - mcts_choose_action (not yet solved)
-# TODO: implement
+# Step 38 - mcts_choose_action
+def mcts_choose_action(state, to_play, net, num_simulations, c_puct, temperature=1.0):
+    # 1. Run MCTS to build the search tree
+    root = run_mcts(
+        state, to_play, net, num_simulations, c_puct
+    )
+
+    # 2. Convert child visit counts into a probability distribution
+    policy = visit_count_policy(root, temperature)
+
+    # 3. Select the action with the highest probability
+    action = int(np.argmax(policy))
+
+    return action, policy
 
 # Step 39 - record_self_play_step (not yet solved)
 # TODO: implement
