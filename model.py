@@ -471,8 +471,19 @@ def run_one_simulation(root, net, c_puct):
     # 5. Back up the value
     backup_value(leaf, value)
 
-# Step 36 - run_mcts (not yet solved)
-# TODO: implement
+# Step 36 - run_mcts
+def run_mcts(state, to_play, net, num_simulations, c_puct):
+    # 1. Create a fresh root node
+    root = make_mcts_node()
+    root['board'] = state.copy()
+    root['to_play'] = to_play
+
+    # 2. Run the requested number of MCTS simulations
+    for _ in range(num_simulations):
+        run_one_simulation(root, net, c_puct)
+
+    # 3. Return the root containing visit statistics and children
+    return root
 
 # Step 37 - visit_count_policy (not yet solved)
 # TODO: implement
